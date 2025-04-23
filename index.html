@@ -13,22 +13,16 @@
             min-height: 100vh;
             background: #1a1a1a;
             font-family: Arial, sans-serif;
-            overflow: hidden;
         }
         #container {
             perspective: 1000px;
-            width: 300px;
-            height: 300px;
-            cursor: grab;
-        }
-        #container:active {
-            cursor: grabbing;
         }
         #cube {
             width: 300px;
             height: 300px;
             position: relative;
             transform-style: preserve-3d;
+            transform: rotateX(-30deg) rotateY(30deg);
             transition: transform 0.1s linear;
         }
         .face {
@@ -40,12 +34,10 @@
             grid-template-rows: repeat(3, 1fr);
             background: #000;
             transform-style: preserve-3d;
-            user-select: none;
         }
         .cubie {
             border: 1px solid #222;
             border-radius: 4px;
-            pointer-events: none;
         }
         .front { transform: translateZ(150px); }
         .back { transform: translateZ(-150px) rotateY(180deg); }
@@ -59,6 +51,59 @@
         .orange { background: #ff8c00; }
         .blue { background: #0051ba; }
         .green { background: #009e60; }
+
+        /* Move Parser UI */
+        #moveParser {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 8px;
+            color: white;
+            width: 300px;
+        }
+        #moveInput {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            background: #333;
+            border: 1px solid #444;
+            color: white;
+            border-radius: 4px;
+        }
+        #moveButtons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .moveButton {
+            padding: 8px 16px;
+            background: #444;
+            border: none;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .moveButton:hover {
+            background: #555;
+        }
+        .moveButton:disabled {
+            background: #222;
+            cursor: not-allowed;
+        }
+        #moveStatus {
+            font-size: 14px;
+            color: #aaa;
+            margin-top: 10px;
+        }
+        .error {
+            color: #ff4444;
+        }
+        .success {
+            color: #44ff44;
+        }
     </style>
 </head>
 <body>
@@ -71,6 +116,15 @@
             <div class="face top"></div>
             <div class="face bottom"></div>
         </div>
+    </div>
+    <div id="moveParser">
+        <input type="text" id="moveInput" placeholder="Enter moves (e.g., R U R' U')">
+        <div id="moveButtons">
+            <button class="moveButton" id="executeButton">Execute</button>
+            <button class="moveButton" id="invertButton">Invert</button>
+            <button class="moveButton" id="clearButton">Clear</button>
+        </div>
+        <div id="moveStatus"></div>
     </div>
     <script src="cube.js"></script>
 </body>
