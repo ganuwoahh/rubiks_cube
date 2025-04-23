@@ -10,6 +10,13 @@ class RubiksCube {
             top: document.querySelector('.top'),
             bottom: document.querySelector('.bottom')
         };
+        
+        // Initialize rotation state
+        this.rotationX = -30;
+        this.rotationY = 30;
+        this.isMouseDown = false;
+        this.lastMouseX = 0;
+        this.lastMouseY = 0;
 
         // Initialize cube state
         this.state = {
@@ -45,16 +52,47 @@ class RubiksCube {
             ]
         };
         
-        // Initialize rotation state
-        this.rotationX = -30;
-        this.rotationY = 30;
-        this.isMouseDown = false;
-        this.lastMouseX = 0;
-        this.lastMouseY = 0;
-        
         this.initializeCube();
         this.setupMouseControls();
         this.setupKeyboardControls();
+    }
+
+    reset() {
+        // Set the state to solved
+        this.state = {
+            front: [
+                ['green', 'green', 'green'],
+                ['green', 'green', 'green'],
+                ['green', 'green', 'green']
+            ],
+            back: [
+                ['blue', 'blue', 'blue'],
+                ['blue', 'blue', 'blue'],
+                ['blue', 'blue', 'blue']
+            ],
+            right: [
+                ['red', 'red', 'red'],
+                ['red', 'red', 'red'],
+                ['red', 'red', 'red']
+            ],
+            left: [
+                ['orange', 'orange', 'orange'],
+                ['orange', 'orange', 'orange'],
+                ['orange', 'orange', 'orange']
+            ],
+            top: [
+                ['white', 'white', 'white'],
+                ['white', 'white', 'white'],
+                ['white', 'white', 'white']
+            ],
+            bottom: [
+                ['yellow', 'yellow', 'yellow'],
+                ['yellow', 'yellow', 'yellow'],
+                ['yellow', 'yellow', 'yellow']
+            ]
+        };
+        // Update the visual state
+        this.updateVisual();
     }
 
     initializeCube() {
@@ -390,6 +428,7 @@ class MoveParser {
         this.executeButton = document.getElementById('executeButton');
         this.invertButton = document.getElementById('invertButton');
         this.clearButton = document.getElementById('clearButton');
+        this.resetButton = document.getElementById('resetButton');
         this.moveStatus = document.getElementById('moveStatus');
         
         this.setupEventListeners();
@@ -399,6 +438,7 @@ class MoveParser {
         this.executeButton.addEventListener('click', () => this.executeMoves());
         this.invertButton.addEventListener('click', () => this.invertMoves());
         this.clearButton.addEventListener('click', () => this.clearInput());
+        this.resetButton.addEventListener('click', () => this.resetCube());
         this.moveInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 this.executeMoves();
@@ -567,6 +607,11 @@ class MoveParser {
         this.moveStatus.className = '';
     }
 
+    resetCube() {
+        this.cube.reset();
+        this.showSuccess('Cube reset to solved state');
+    }
+
     showError(message) {
         this.moveStatus.textContent = message;
         this.moveStatus.className = 'error';
@@ -580,6 +625,4 @@ class MoveParser {
 
 // Initialize the cube and move parser
 const cube = new RubiksCube();
-const moveParser = new MoveParser(cube);
-
-window.addEventListener('load', () => new RubiksCube()); 
+const moveParser = new MoveParser(cube); 
