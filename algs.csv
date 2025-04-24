@@ -77,33 +77,3 @@ H-Perm,M2 U M2 U2 M2 U M2
 Ua-Perm,M2 U M U2 M' U M2
 Ub-Perm,M2 U' M U2 M' U' M2
 Z-Perm,M' U M2 U M2 U M' U2 M2
-
-
-
-
-
-
-
-
-
-Ua-Perm,R U R' U R U R' U' R' U R2
-Ub-Perm,R' U' R U' R' U R U R U' R2
-Z-Perm,M2 U M2 U M' U2 M2 U2 M' U2
-H-Perm,M2 U M2 U2 M2 U M2
-Aa-Perm,R' U R' B2 R U' R' B2 R2
-Ab-Perm,R2 B2 R U R' B2 R U' R
-Ea-Perm,R U' R' D R U R' D' R U R' D R U' R' D'
-T-Perm,R U R' U' R' F R2 U' R' U' R U R' F'
-F-Perm,R U R' U' R U R' F' R U R' U' R' F R2 U' R' U'
-Ja-Perm,R2 F R F' R U2 R' U R U2 R'
-Jb-Perm,R U R' F' R U R' U' R' F R2 U' R'
-Ra-Perm,R U' R' U' R U R D R' U' R D' R' U2 R'
-Rb-Perm,R2 F R U R U' R' F' R U2 R' U2 R
-V-Perm,R' U R' U' U R' F' R2 U' R' U R' F R F
-Y-Perm,F R U' R' U' R U R' F' R U R' U' R' F R F'
-Na-Perm,R U R' U R U R' F' R U R' U' R' F R2 U' R' U2 R U' R'
-Nb-Perm,R' U R U' R' F' U' F R U R' F R' F' R U' R
-Ga-Perm,R2 U R' U R' U' R U' R2 U D R' U R D'
-Gb-Perm,F' U' F R2 U R' U R U' R U' R2
-Gc-Perm,R2 U' R U' R U R' U R2 D' U R U' R' D U'
-Gd-Perm,R U R' U' D R2 U' R U' R' U R' U R2 D'
