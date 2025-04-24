@@ -429,9 +429,35 @@ class MoveParser {
         this.invertButton = document.getElementById('invertButton');
         this.clearButton = document.getElementById('clearButton');
         this.resetButton = document.getElementById('resetButton');
+        this.algSelect = document.getElementById('algSelect');
         this.moveStatus = document.getElementById('moveStatus');
         
         this.setupEventListeners();
+        this.loadAlgorithms();
+    }
+
+    async loadAlgorithms() {
+        try {
+            // Replace this URL with your hosted CSV file URL
+            const response = await fetch('https://raw.githubusercontent.com/ganuwoahh/rubiks_cube/main/algs.csv');
+            const csvText = await response.text();
+            const lines = csvText.split('\n');
+            
+            // Skip header row
+            for (let i = 1; i < lines.length; i++) {
+                const [name, alg] = lines[i].split(',').map(s => s.trim());
+                if (name && alg) {
+                    const option = document.createElement('option');
+                    option.value = alg;
+                    option.textContent = name;
+                    this.algSelect.appendChild(option);
+                }
+            }
+            this.showSuccess('Algorithms loaded successfully');
+        } catch (error) {
+            console.error('Error loading algorithms:', error);
+            this.showError('Failed to load algorithms');
+        }
     }
 
     setupEventListeners() {
@@ -439,11 +465,70 @@ class MoveParser {
         this.invertButton.addEventListener('click', () => this.invertMoves());
         this.clearButton.addEventListener('click', () => this.clearInput());
         this.resetButton.addEventListener('click', () => this.resetCube());
+        this.algSelect.addEventListener('change', () => this.handleAlgorithmSelection());
         this.moveInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 this.executeMoves();
             }
         });
+    }
+
+    async handleAlgorithmSelection() {
+        const selectedAlg = this.algSelect.value;
+        if (!selectedAlg) return;
+
+        // Put the algorithm in the text box
+        this.moveInput.value = selectedAlg;
+
+        // Execute the inverse of the algorithm
+        const { validMoves, errors } = this.parseMoves(selectedAlg);
+        if (errors.length > 0) {
+            this.showError(errors.join(', '));
+            return;
+        }
+
+        // Invert the moves
+        const invertedMoves = validMoves
+            .reverse()
+            .map(move => {
+                if (move.count === 2) {
+                    return `${move.face}2`;
+                }
+                return {
+                    ...move,
+                    direction: move.direction === 'clockwise' ? 'counterclockwise' : 'clockwise'
+                };
+            })
+            .map(move => {
+                if (typeof move === 'string') return move;
+                const direction = move.direction === 'clockwise' ? '' : "'";
+                return `${move.face}${direction}`;
+            })
+            .join(' ');
+
+        // Execute the inverted moves
+        const { validMoves: invertedValidMoves, errors: invertedErrors } = this.parseMoves(invertedMoves);
+        if (invertedErrors.length > 0) {
+            this.showError(invertedErrors.join(', '));
+            return;
+        }
+
+        this.executeButton.disabled = true;
+        this.invertButton.disabled = true;
+        this.clearButton.disabled = true;
+        this.resetButton.disabled = true;
+
+        for (const move of invertedValidMoves) {
+            for (let i = 0; i < move.count; i++) {
+                await this.cube.rotateFace(move.face, move.direction);
+            }
+        }
+
+        this.executeButton.disabled = false;
+        this.invertButton.disabled = false;
+        this.clearButton.disabled = false;
+        this.resetButton.disabled = false;
+        this.showSuccess('Algorithm setup complete');
     }
 
     parseMoves(moveString) {
